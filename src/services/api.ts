@@ -47,7 +47,6 @@ export const getSerie = async (id?: string): Promise<SerieResponse | null> => {
 }
 
 export const getDescription =async (url:string) => {
-
   return await fetch(urlTransformed(url))
     .then((response: Response) => {
       console.log(response)

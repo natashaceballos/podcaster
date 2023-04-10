@@ -1,18 +1,16 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { EpisodeData, SerieResponse } from '../../../../types/SerieDetail'
-import { useFull } from './useFull'
 import { formatTime } from './helper'
 import clsx from 'clsx'
 import PodcatsDetail from './components/PodcatsDetail/PodcatsDetail'
+import { usePodcastingProvider } from '../../../PodcastingProvider/PodcastingProvider'
 
-const Full: FC<{ serie: SerieResponse; type: 'podcast' | 'episode' }> = ({
+const Full: FC<{ serie: SerieResponse }> = ({
   serie: { serie, episodes },
-  type = 'podcast',
 }) => {
-  const {
-    state: { description },
-  } = useFull(serie)
+  const {actions:{setIsLoading}}=usePodcastingProvider()
+
   return (
     <div className="w-full grid grid-flow-col">
       <PodcatsDetail podcast={serie} />
@@ -41,9 +39,13 @@ const Full: FC<{ serie: SerieResponse; type: 'podcast' | 'episode' }> = ({
                         (key == 0 || key % 2 == 0) && 'bg-slate-100'
                       )}
                     >
-                      <td className="text-cyan-700">
-                        {' '}
-                        <Link to={'/'}> {episode.trackName}</Link>
+                      <td className="text-cyan-700" onClick={()=>setIsLoading(true)}>
+                        <Link
+                          to={`/podcast/${serie.collectionId}/episode/${episode.trackId}`}
+                          state={{ serie: serie, episode: episode }}
+                        >
+                          {episode.trackName}
+                        </Link>
                       </td>
                       <td>{`${date.getDay()}/${
                         date.getMonth() + 1

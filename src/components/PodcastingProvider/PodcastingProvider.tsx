@@ -1,5 +1,4 @@
 import {
-  Children,
   ReactNode,
   createContext,
   useContext,
@@ -10,13 +9,15 @@ import {
 import { HookOutput } from '../../hooks/types'
 import { initialFetch } from '../../services/api'
 import { formatPodcasts } from '../../helpers/types'
-import { useHref, useResolvedPath, useRoutes } from 'react-router-dom'
 import { Serie } from '../../types/Serie'
+import { timeToExpire } from '../../constans/timeConstans'
 
 const PodcastingContext = createContext<{
   series: Serie[]
+  filteredSeries: Serie[]
   isLoading: boolean
   setIsLoading: (isLoading: boolean) => void
+  setFilteredSeries: (series: Serie[]) => void
 } | null>(null)
 
 export const usePodcastingProvider = (): HookOutput => {
@@ -28,15 +29,19 @@ export const usePodcastingProvider = (): HookOutput => {
     )
   }
 
-  const { series, isLoading, setIsLoading } = context
-  return { state: { series, isLoading }, actions: { setIsLoading } }
+  const { series, filteredSeries, isLoading, setIsLoading, setFilteredSeries } =
+    context
+  return {
+    state: { series, filteredSeries, isLoading },
+    actions: { setIsLoading, setFilteredSeries },
+  }
 }
 
 const PodcastingProvider = ({ children }: { children: ReactNode }) => {
+  const [expirationTime, setExpirationTime] = useState(timeToExpire)
   const [series, setSeries] = useState<Serie[]>([])
+  const [filteredSeries, setFilteredSeries] = useState<Serie[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const [fetchDate, setFetchDate] = useState(new Date().getTime())
 
   const fetchPodcasts = () => {
     initialFetch().then((response) => {
@@ -45,6 +50,8 @@ const PodcastingProvider = ({ children }: { children: ReactNode }) => {
         formattedPodcasts.push(formatPodcasts(r))
       })
       setSeries(formattedPodcasts)
+      setFilteredSeries(formattedPodcasts)
+      setExpirationTime(timeToExpire)
     })
   }
 
@@ -52,8 +59,27 @@ const PodcastingProvider = ({ children }: { children: ReactNode }) => {
     fetchPodcasts()
   }, [])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setExpirationTime((prevMilliseconds) => prevMilliseconds - timeToExpire)
+    }, timeToExpire)
+    return () => clearInterval(interval)
+  }, [expirationTime])
+
+  useEffect(() => {
+    if (expirationTime == 0) {
+      fetchPodcasts()
+    }
+  }, [expirationTime])
+
   const value = useMemo(
-    () => ({ series, isLoading, setIsLoading }),
+    () => ({
+      series,
+      isLoading,
+      setIsLoading,
+      filteredSeries,
+      setFilteredSeries,
+    }),
     [{ series, isLoading, setIsLoading }]
   )
   return (

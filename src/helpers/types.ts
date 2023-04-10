@@ -1,4 +1,4 @@
-import { Serie } from '../components/PodcastingProvider/types'
+import { Serie } from "../types/Serie"
 
 export const formatPodcasts = (initialPodcast: any): Serie => {
   // cambiamos el 'im:id' por 'id'

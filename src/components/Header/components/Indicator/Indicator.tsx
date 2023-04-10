@@ -9,6 +9,7 @@ const Indicator: FC<{isLoading:boolean}> = ({isLoading}) => {
         isLoading && 'animate-pulse-borde',
         !isLoading && 'hidden'
       )}
+      data-testid='indicator'
     />
   )
 }

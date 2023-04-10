@@ -10,6 +10,7 @@ import {
 import { Index } from './pages/Index'
 import { getSerie } from './services/api'
 import { PodcastDetail } from './pages/PodcastDetail'
+import { EpisodeDetail } from './pages/EpisodeDetail'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       const response = await getSerie(params.podcastId)
       return response
     },
+  },
+  {
+    path: '/podcast/:podcastId/episode/:episodeId',
+    element: <EpisodeDetail />,
   },
 ])
 

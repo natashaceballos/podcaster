@@ -6,7 +6,7 @@ import { Full, Teaser } from './viewmodes'
 import { Serie } from '../../types/Serie'
 import { SerieDetail, SerieResponse } from '../../types/SerieDetail'
 
-const Podcast: FC<{ serie: Serie | SerieResponse; viewMode: string }> = ({
+const Podcast: FC<{ serie: Serie | SerieResponse; viewMode: string, description?:string }> = ({
   serie,
   viewMode,
   ...props

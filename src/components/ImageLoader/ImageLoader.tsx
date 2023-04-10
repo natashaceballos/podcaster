@@ -26,7 +26,7 @@ const ImageLoader: FC<{ src: string; alt: string; className?: string, rounded?:b
   return (
     <>
       {!imageLoaded ? (
-        <div>Cargando imagen...</div>
+        <div className='w-full h-full'>Loading image...</div>
       ) : (
         <img src={imageUrl} alt={alt} className={clsx(className)} />
       )}
