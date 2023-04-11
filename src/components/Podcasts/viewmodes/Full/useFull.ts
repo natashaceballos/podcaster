@@ -14,7 +14,6 @@ export const useFull = (): HookOutput => {
   const [serie, setSerie] = useState<SerieResponse>()
 
   useEffect(() => {
-    console.log(serieSelected)
     setSerie(serieSelected.podcastData)
     setIsLoading(false)
   }, [serieSelected])

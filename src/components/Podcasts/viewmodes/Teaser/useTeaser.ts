@@ -33,7 +33,6 @@ export const useTeaser = (): HookOutput => {
     }
     localStorage.setItem(id, JSON.stringify(podcastDetail))
     setSerieSelected(podcastDetail)
-    console.log('por queeee??')
   }
 
   return { state: {}, actions: { handleOnClick } }
