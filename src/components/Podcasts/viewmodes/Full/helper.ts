@@ -9,5 +9,7 @@ export const formatTime = (time: string) => {
   const stringSeconds = seconds < 10 ? '0' + seconds : seconds
   const stringMinutes = minutes < 10 ? '0' + minutes : minutes
   const stringHours = hours < 10 ? '0' + hours : hours
-  return hours == 0? `${stringMinutes}:${stringSeconds}`: `${stringHours}:${stringMinutes}:${stringSeconds}`
+  return hours == 0
+    ? `${stringMinutes}:${stringSeconds}`
+    : `${stringHours}:${stringMinutes}:${stringSeconds}`
 }

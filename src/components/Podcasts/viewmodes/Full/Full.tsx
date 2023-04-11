@@ -1,25 +1,31 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { EpisodeData, SerieResponse } from '../../../../types/SerieDetail'
 import { formatTime } from './helper'
 import clsx from 'clsx'
 import PodcatsDetail from './components/PodcatsDetail/PodcatsDetail'
-import { usePodcastingProvider } from '../../../PodcastingProvider/PodcastingProvider'
+import { useFull } from './useFull'
+import { EpisodeData } from '@/types/SerieDetail'
 
-const Full: FC<{ serie: SerieResponse }> = ({
-  serie: { serie, episodes },
-}) => {
-  const {actions:{setIsLoading}}=usePodcastingProvider()
+const Full: FC<{}> = ({}) => {
+  const {
+    state: {
+      serie
+    },
+    actions: { setIsLoading },
+  } = useFull()
 
+  if (serie == undefined) {
+    return <></>
+  }
   return (
     <div className="w-full grid grid-flow-col">
-      <PodcatsDetail podcast={serie} />
+      <PodcatsDetail podcast={serie.serie} />
       <div className="w-full flex flex-col gap-y-8">
         <div className="rounded-sm shadow-card font-bold text-3xl p-3">
-          Episodes: {episodes.length}
+          Episodes: {serie.episodes.length}
         </div>
         <div className="shadow-card w-full">
-          <div className="m-5">
+          <div className="m-5 max-w-4xl">
             <table className="w-full table-auto ">
               <thead className="text-justify">
                 <tr>
@@ -29,7 +35,7 @@ const Full: FC<{ serie: SerieResponse }> = ({
                 </tr>
               </thead>
               <tbody>
-                {episodes.map((episode: EpisodeData, key: number) => {
+                {serie.episodes.map((episode: EpisodeData, key: number) => {
                   const date: Date = new Date(episode.releaseDate)
                   return (
                     <tr
@@ -39,10 +45,13 @@ const Full: FC<{ serie: SerieResponse }> = ({
                         (key == 0 || key % 2 == 0) && 'bg-slate-100'
                       )}
                     >
-                      <td className="text-cyan-700" onClick={()=>setIsLoading(true)}>
+                      <td
+                        className="text-cyan-700"
+                        onClick={() => setIsLoading(true)}
+                      >
                         <Link
                           to={`/podcast/${serie.collectionId}/episode/${episode.trackId}`}
-                          state={{ serie: serie, episode: episode }}
+                          state={{ serie: serie.serie, episode: episode }}
                         >
                           {episode.trackName}
                         </Link>

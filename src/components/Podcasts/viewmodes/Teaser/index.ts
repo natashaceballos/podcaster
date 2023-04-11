@@ -1,1 +1,1 @@
-export {default} from './Teaser'
+export { default } from './Teaser'

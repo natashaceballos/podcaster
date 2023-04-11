@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import clsx from 'clsx';
+import clsx from 'clsx'
 
-const ImageLoader: FC<{ src: string; alt: string; className?: string, rounded?:boolean }> = ({
-  src,
-  alt,
-  className,
-  rounded=false
-}) => {
+const ImageLoader: FC<{
+  src: string
+  alt: string
+  className?: string
+  rounded?: boolean
+}> = ({ src, alt, className, rounded = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
 
@@ -20,15 +20,14 @@ const ImageLoader: FC<{ src: string; alt: string; className?: string, rounded?:b
     }
 
     loadImage()
-    
   }, [])
 
   return (
     <>
       {!imageLoaded ? (
-        <div className='w-full h-full'>Loading image...</div>
+        <div data-testid='loading' className="w-full h-full">Loading image...</div>
       ) : (
-        <img src={imageUrl} alt={alt} className={clsx(className)} />
+        <img data-testid='image-loaded' src={imageUrl} alt={alt} className={clsx(className)} />
       )}
     </>
   )

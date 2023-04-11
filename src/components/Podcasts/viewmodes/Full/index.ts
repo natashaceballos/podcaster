@@ -1,1 +1,1 @@
-export {default} from './Full'
+export { default } from './Full'

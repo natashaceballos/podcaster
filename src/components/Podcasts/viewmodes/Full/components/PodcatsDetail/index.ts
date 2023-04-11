@@ -1,1 +1,1 @@
-export {default} from './PodcatsDetail'
+export { default } from './PodcatsDetail'

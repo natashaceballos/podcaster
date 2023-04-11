@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@testing-library/jest-dom'],
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
   },
 })

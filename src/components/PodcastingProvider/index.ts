@@ -1,1 +1,1 @@
-export {default} from './PodcastingProvider'
+export { default } from './PodcastingProvider'

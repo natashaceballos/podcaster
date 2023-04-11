@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { FC } from 'react'
 
-const Indicator: FC<{isLoading:boolean}> = ({isLoading}) => {
+const Indicator: FC<{ isLoading: boolean }> = ({ isLoading }) => {
   return (
     <div
       className={clsx(
@@ -9,7 +9,7 @@ const Indicator: FC<{isLoading:boolean}> = ({isLoading}) => {
         isLoading && 'animate-pulse-borde',
         !isLoading && 'hidden'
       )}
-      data-testid='indicator'
+      data-testid="indicator"
     />
   )
 }

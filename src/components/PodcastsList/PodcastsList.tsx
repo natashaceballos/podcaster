@@ -7,13 +7,13 @@ import Searcher from '../Searcher/Searcher'
 
 const PodcastsList: FC<{}> = ({}) => {
   const {
-    state: { filteredSeries,isLoading },
+    state: { filteredSeries, isLoading },
     actions: { setIsLoading },
   } = usePodcastingProvider()
-  
-useEffect(() => {
-  setIsLoading(false)
-}, [isLoading])
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [isLoading])
 
   return (
     <div>

@@ -1,3 +1,9 @@
+import { timeToExpire } from '@/constans/timeConstans'
+import { formatPodcasts } from '@/helpers/types'
+import { initialFetch } from '@/services/api'
+import { HookOutput } from '@/types/Hook'
+import { LocalStorageList } from '@/types/LocalStorageList'
+import { Serie } from '@/types/Serie'
 import {
   ReactNode,
   createContext,
@@ -6,17 +12,14 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { HookOutput } from '../../hooks/types'
-import { initialFetch } from '../../services/api'
-import { formatPodcasts } from '../../helpers/types'
-import { Serie } from '../../types/Serie'
-import { timeToExpire } from '../../constans/timeConstans'
 
 const PodcastingContext = createContext<{
   series: Serie[]
+  serieSelected?:LocalStorageList
   filteredSeries: Serie[]
   isLoading: boolean
   setIsLoading: (isLoading: boolean) => void
+  setSerieSelected: (serie: LocalStorageList) => void
   setFilteredSeries: (series: Serie[]) => void
 } | null>(null)
 
@@ -29,17 +32,18 @@ export const usePodcastingProvider = (): HookOutput => {
     )
   }
 
-  const { series, filteredSeries, isLoading, setIsLoading, setFilteredSeries } =
+  const { series, serieSelected, filteredSeries, isLoading, setIsLoading, setSerieSelected, setFilteredSeries } =
     context
   return {
-    state: { series, filteredSeries, isLoading },
-    actions: { setIsLoading, setFilteredSeries },
+    state: { series, serieSelected, filteredSeries, isLoading },
+    actions: { setIsLoading, setSerieSelected, setFilteredSeries },
   }
 }
 
 const PodcastingProvider = ({ children }: { children: ReactNode }) => {
-  const [expirationTime, setExpirationTime] = useState(timeToExpire)
   const [series, setSeries] = useState<Serie[]>([])
+  const [serieSelected, setSerieSelected] = useState<LocalStorageList>()
+
   const [filteredSeries, setFilteredSeries] = useState<Serie[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -50,37 +54,41 @@ const PodcastingProvider = ({ children }: { children: ReactNode }) => {
         formattedPodcasts.push(formatPodcasts(r))
       })
       setSeries(formattedPodcasts)
+      localStorage.setItem('podcasts', JSON.stringify(formattedPodcasts))
       setFilteredSeries(formattedPodcasts)
-      setExpirationTime(timeToExpire)
+      localStorage.setItem('lastFetch', new Date().getDate().toString())
     })
   }
 
   useEffect(() => {
-    fetchPodcasts()
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setExpirationTime((prevMilliseconds) => prevMilliseconds - timeToExpire)
-    }, timeToExpire)
-    return () => clearInterval(interval)
-  }, [expirationTime])
-
-  useEffect(() => {
-    if (expirationTime == 0) {
+    const lastFetch = localStorage.getItem('lastFetch')
+    if (lastFetch != null) {
+      const expirationTime = new Date().getDate() - Number(lastFetch)
+      if (expirationTime >= timeToExpire) {
+        fetchPodcasts()
+      } else {
+        const podcastsJson = localStorage.getItem('podcasts')
+        if (podcastsJson != null) {
+          setSeries(JSON.parse(podcastsJson))
+          setFilteredSeries(JSON.parse(podcastsJson))
+        }
+      }
+    } else {
       fetchPodcasts()
     }
-  }, [expirationTime])
+  }, [])
 
   const value = useMemo(
     () => ({
       series,
+      serieSelected,
       isLoading,
       setIsLoading,
       filteredSeries,
       setFilteredSeries,
+      setSerieSelected,
     }),
-    [{ series, isLoading, setIsLoading }]
+    [{ series, serieSelected ,isLoading, setIsLoading }]
   )
   return (
     <PodcastingContext.Provider value={value}>

@@ -1,35 +1,34 @@
-import { useEffect, useState } from "react";
-import { HookOutput } from "../../hooks/types";
-import { usePodcastingProvider } from "../PodcastingProvider/PodcastingProvider";
-import { Serie } from "../../types/Serie";
+import { useEffect, useState } from 'react'
+import { usePodcastingProvider } from '../PodcastingProvider/PodcastingProvider'
+import { Serie } from '../../types/Serie'
+import { HookOutput } from '../../types/Hook'
 
 let timeout: ReturnType<typeof setTimeout>
 
-export const useSearcher =():HookOutput=>{
+export const useSearcher = (): HookOutput => {
+  const {
+    state: { series, filteredSeries },
+    actions: { setIsLoading, setFilteredSeries },
+  } = usePodcastingProvider()
+  const [filter, setFilter] = useState('')
+  const [query, setquery] = useState('')
 
-    const {
-        state: { series, filteredSeries },
-        actions: { setIsLoading, setFilteredSeries },
-      } = usePodcastingProvider()
-      const [filter, setFilter] = useState('')
-      const [query, setquery] = useState('')
-    
-      const handleOnChange = (query: string) => {
-        setIsLoading(true)
-        clearTimeout(timeout)
-        setquery(query)
-        timeout = setTimeout(() => {
-          setIsLoading(false)
-          setFilter(query)
-        }, 500)
-      }
-    
-      useEffect(() => {
-        const filteredItems = series.filter((serie: Serie) =>
-          serie.title.label.toLowerCase().includes(filter.toLowerCase())
-        )
-        setFilteredSeries(filteredItems)
-      }, [filter])
+  const handleOnChange = (query: string) => {
+    setIsLoading(true)
+    clearTimeout(timeout)
+    setquery(query)
+    timeout = setTimeout(() => {
+      setIsLoading(false)
+      setFilter(query)
+    }, 500)
+  }
 
-    return {state:{filteredSeries, query},actions:{handleOnChange}}
+  useEffect(() => {
+    const filteredItems = series.filter((serie: Serie) =>
+      serie.title.label.toLowerCase().includes(filter.toLowerCase())
+    )
+    setFilteredSeries(filteredItems)
+  }, [filter])
+
+  return { state: { filteredSeries, query }, actions: { handleOnChange } }
 }
