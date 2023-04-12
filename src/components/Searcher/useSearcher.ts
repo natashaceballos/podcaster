@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { usePodcastingProvider } from '../PodcastingProvider/PodcastingProvider'
-import { Serie } from '../../types/Serie'
-import { HookOutput } from '../../types/Hook'
+import { HookOutput } from '@/types/Hook'
+import { Serie } from '@/types/Serie'
 
 let timeout: ReturnType<typeof setTimeout>
 

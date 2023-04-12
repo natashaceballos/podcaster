@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react'
 import { usePodcastingProvider } from '../PodcastingProvider/PodcastingProvider'
 import Podcast from '../Podcasts/Podcast'
 import { VIEW_MODE_TEASER } from '../Podcasts/contants'
-import { Serie } from '../../types/Serie'
 import Searcher from '../Searcher/Searcher'
+import { Serie } from '@/types/Serie'
 
 const PodcastsList: FC<{}> = ({}) => {
   const {

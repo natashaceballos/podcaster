@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { formatTime } from './helper'
 import clsx from 'clsx'
@@ -6,26 +6,24 @@ import PodcatsDetail from './components/PodcatsDetail/PodcatsDetail'
 import { useFull } from './useFull'
 import { EpisodeData } from '@/types/SerieDetail'
 
-const Full: FC<{}> = ({}) => {
+const Full: FC<{ id?: string }> = ({ id }) => {
   const {
-    state: {
-      serie
-    },
-    actions: { setIsLoading },
-  } = useFull()
+    state: { serie },
+  } = useFull(id)
 
   if (serie == undefined) {
     return <></>
   }
+
   return (
-    <div className="w-full grid grid-flow-col">
+    <div className="w-full gap-x-4 grid-flow-row gap-y-10 pb-10 grid md:grid-flow-col">
       <PodcatsDetail podcast={serie.serie} />
-      <div className="w-full flex flex-col gap-y-8">
+      <div className="w-full flex flex-col max-w-lg md:max-w-3xl m-auto md:m-0 gap-y-8">
         <div className="rounded-sm shadow-card font-bold text-3xl p-3">
           Episodes: {serie.episodes.length}
         </div>
         <div className="shadow-card w-full">
-          <div className="m-5 max-w-4xl">
+          <div className="m-5 ">
             <table className="w-full table-auto ">
               <thead className="text-justify">
                 <tr>
@@ -47,11 +45,10 @@ const Full: FC<{}> = ({}) => {
                     >
                       <td
                         className="text-cyan-700"
-                        onClick={() => setIsLoading(true)}
                       >
                         <Link
-                          to={`/podcast/${serie.collectionId}/episode/${episode.trackId}`}
-                          state={{ serie: serie.serie, episode: episode }}
+                          to={`/podcast/${serie.serie.collectionId}/episode/${episode.trackId}`}
+                          state={{ episode: episode }}
                         >
                           {episode.trackName}
                         </Link>

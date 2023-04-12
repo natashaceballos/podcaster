@@ -1,8 +1,9 @@
+import { usePodcastingProvider } from '@/components/PodcastingProvider/PodcastingProvider'
+import { HookOutput } from '@/types/Hook'
+import { Serie } from '@/types/Serie'
+import { SerieDetail } from '@/types/SerieDetail'
 import { useEffect, useState } from 'react'
-import { SerieDetail } from '../../../../../../types/SerieDetail'
-import { usePodcastingProvider } from '../../../../../PodcastingProvider/PodcastingProvider'
-import { Serie } from '../../../../../../types/Serie'
-import { HookOutput } from '../../../../../../types/Hook'
+
 
 export const usePodcatsDetail = (serie: SerieDetail): HookOutput => {
   const [description, setDescription] = useState<string>('')

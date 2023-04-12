@@ -56,14 +56,14 @@ const PodcastingProvider = ({ children }: { children: ReactNode }) => {
       setSeries(formattedPodcasts)
       localStorage.setItem('podcasts', JSON.stringify(formattedPodcasts))
       setFilteredSeries(formattedPodcasts)
-      localStorage.setItem('lastFetch', new Date().getDate().toString())
+      localStorage.setItem('lastFetch',  Date.now().toString())
     })
   }
 
   useEffect(() => {
     const lastFetch = localStorage.getItem('lastFetch')
     if (lastFetch != null) {
-      const expirationTime = new Date().getDate() - Number(lastFetch)
+      const expirationTime = Date.now() - Number(lastFetch)
       if (expirationTime >= timeToExpire) {
         fetchPodcasts()
       } else {

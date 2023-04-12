@@ -1,9 +1,5 @@
-import { FC, useEffect, useState } from 'react'
-import { usePodcastingProvider } from '../PodcastingProvider/PodcastingProvider'
-import { Serie } from '../../types/Serie'
+import { FC } from 'react'
 import { useSearcher } from './useSearcher'
-
-let timeout: ReturnType<typeof setTimeout>
 
 const Searcher: FC<{}> = ({}) => {
   const {

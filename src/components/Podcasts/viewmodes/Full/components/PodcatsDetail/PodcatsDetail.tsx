@@ -1,15 +1,17 @@
 import { FC } from 'react'
-import { SerieDetail } from '../../../../../../types/SerieDetail'
-import ImageLoader from '../../../../../ImageLoader/ImageLoader'
+
 import { Link } from 'react-router-dom'
 import { usePodcatsDetail } from './usePodcatsDetail'
+import { SerieDetail } from '@/types/SerieDetail'
+import ImageLoader from '@/components/ImageLoader/ImageLoader'
 
 const PodcatsDetail: FC<{ podcast: SerieDetail }> = ({ podcast }) => {
   const {
     state: { description },
   } = usePodcatsDetail(podcast)
+  
   return (
-    <div className=" rounded-sm mx-auto shadow-card max-w-xs pr-2 h-fit break-words flex flex-col gap-y-3">
+    <div className=" rounded-sm mx-auto shadow-card max-w-lg md:max-w-xs pr-2 h-fit break-words flex flex-col gap-y-3">
       <Link to={`/podcast/${podcast.collectionId}`}>
         <ImageLoader
           src={podcast.artworkUrl600}

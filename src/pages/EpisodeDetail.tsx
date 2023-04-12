@@ -7,7 +7,7 @@ export const EpisodeDetail = () => {
 
   return (
     <Header>
-      <Episode serie={location.state.serie} episode={location.state.episode} />
+      <Episode episode={location.state.episode} />
     </Header>
   )
 }
